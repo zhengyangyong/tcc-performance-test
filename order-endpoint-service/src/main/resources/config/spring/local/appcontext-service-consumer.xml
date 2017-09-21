@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="httpInvokerRequestExecutor"
+          class="org.springframework.remoting.httpinvoker.CommonsHttpInvokerRequestExecutor">
+        <property name="httpClient">
+            <bean class="org.apache.commons.httpclient.HttpClient">
+                <property name="httpConnectionManager">
+                    <ref bean="multiThreadHttpConnectionManager"/>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="multiThreadHttpConnectionManager"
+          class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager">
+        <property name="params">
+            <bean class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">
+                <property name="connectionTimeout" value="2000"/>
+                <property name="maxTotalConnections" value="600"/>
+                <property name="defaultMaxConnectionsPerHost" value="512"/>
+                <property name="soTimeout" value="5000"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="carRentalService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:8081/remoting/CarRentalService"/>
+        <property name="serviceInterface"
+                  value="io.servicecomb.perf.test.CarRentalService"/>
+        <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
+    </bean>
+
+    <bean id="flightBookingService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:8082/remoting/FlightBookingService"/>
+        <property name="serviceInterface"
+                  value="io.servicecomb.perf.test.FlightBookingService"/>
+        <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
+    </bean>
+
+    <bean id="hotelReservationService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:8083/remoting/HotelReservationService"/>
+        <property name="serviceInterface"
+                  value="io.servicecomb.perf.test.HotelReservationService"/>
+        <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
+    </bean>
+
+    <bean id="paymentService" class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
+        <property name="serviceUrl" value="http://localhost:8084/remoting/PaymentService"/>
+        <property name="serviceInterface"
+                  value="io.servicecomb.perf.test.PaymentService"/>
+        <property name="httpInvokerRequestExecutor" ref="httpInvokerRequestExecutor"/>
+    </bean>
+
+</beans>
